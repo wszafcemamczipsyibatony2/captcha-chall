@@ -1,6 +1,9 @@
 FROM node:16
-
+RUN apt-get install git
+RUN git clone https://github.com/wszafcemamczipsyibatony2/captcha-chall.git
 # Create app directory
+RUN mkdir /usr/src/app
+RUN cp -a captcha-chall/* /usr/src/app/
 WORKDIR /usr/src/app
 
 # Install app dependencies
@@ -13,7 +16,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+# COPY . .
 
 EXPOSE 80
 CMD [ "node", "server.js" ]
