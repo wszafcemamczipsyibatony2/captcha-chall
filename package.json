@@ -1,0 +1,16 @@
+{
+  "name": "weird_captcha",
+  "version": "1.0.0",
+  "description": "Some captcha service",
+  "author": "ttomek",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.16.1",
+    "express-session": "^1.17.2",
+    "md5": "^2.3.0"
+  }
+}
