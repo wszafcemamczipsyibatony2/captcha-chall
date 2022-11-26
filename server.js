@@ -7,6 +7,8 @@ var md5 = require('md5');
 var cookieParser = require('cookie-parser');
 const url = require('url');
 const fs = require('fs')
+const ejs = require('ejs')
+
 
 const flag = "ping{m15c_ch4ll5_r0ck_08bc5cd52ce0afcd085fa2b1ab63b5a7}";
 let hashes = fs.readFileSync('hashes.txt', 'utf8')
@@ -25,6 +27,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
 	let code = req.cookies.captcha;
@@ -34,12 +37,11 @@ app.get('/', (req, res) => {
 	} else if (req.cookies.captcha === hashes[hashes.length - 1]) {
 		res.cookie('flag', flag, { maxAge: 900000, httpOnly: false });
 	}
-	res.redirect("login.html");
+	res.render('login', { test: "test" });
 });
 
 app.post('/login', (req, res) => {
 	let code = req.body.captcha.trim();
-	console.log(hashes[hashes.length - 1])
 	if (hashes.indexOf(code) !== -1) {
 		if (code === hashes[hashes.length - 1]) {
 			res.cookie('flag', flag, { maxAge: 900000, httpOnly: false });
@@ -54,11 +56,11 @@ app.post('/login', (req, res) => {
 		res.cookie('captcha', hashes[0], { maxAge: 900000, httpOnly: false });
 		res.cookie('turn', "0", { maxAge: 900000, httpOnly: false });
 	}
-	res.redirect('login.html');
+	res.render('login.html');
 })
 
 app.get('/*', (req, res) => {
-	res.redirect('/404.html');
+	res.render('/404.html');
 })
 
 app.listen(80, function () {
