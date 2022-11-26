@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 const url = require('url');
 const fs = require('fs')
 const ejs = require('ejs')
+const TEAM_LINK = process.env.TEAM_LINK
 
 
 const flag = "ping{m15c_ch4ll5_r0ck_08bc5cd52ce0afcd085fa2b1ab63b5a7}";
@@ -16,7 +17,7 @@ hashes = hashes.split('\n')
 hashes = hashes.slice(0, 1001);
 app.use(cookieParser());
 
-app.use(express.static('public'));
+app.use(express.static('views'));
 
 app.use(session({
 	secret: 'secret',
@@ -37,7 +38,7 @@ app.get('/', (req, res) => {
 	} else if (req.cookies.captcha === hashes[hashes.length - 1]) {
 		res.cookie('flag', flag, { maxAge: 900000, httpOnly: false });
 	}
-	res.render('login', { test: "test" });
+	res.render('login', { TEAM_LINK: TEAM_LINK });
 });
 
 app.post('/login', (req, res) => {
@@ -56,11 +57,11 @@ app.post('/login', (req, res) => {
 		res.cookie('captcha', hashes[0], { maxAge: 900000, httpOnly: false });
 		res.cookie('turn', "0", { maxAge: 900000, httpOnly: false });
 	}
-	res.render('login.html');
+	res.render('login', { TEAM_LINK: TEAM_LINK });
 })
 
 app.get('/*', (req, res) => {
-	res.render('/404.html');
+	res.render('/404');
 })
 
 app.listen(80, function () {
